@@ -2,3 +2,4 @@ SpaceInvaders\SecondaryController.class
 module-info.class
 SpaceInvaders\App.class
 SpaceInvaders\PrimaryController.class
+SpaceInvaders\GameOverController.class

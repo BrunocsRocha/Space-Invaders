@@ -14,14 +14,12 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
+    protected static Integer highScore=0;
 
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("primary"), 650, 500);
-        stage.setMaxHeight(500);
-        stage.setMinHeight(500);
-        stage.setMaxWidth(650);
-        stage.setMinWidth(650);
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.setTitle("Space Invaders");
         stage.show();
