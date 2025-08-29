@@ -36,8 +36,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def keyReleaseEvent(self, event):
         key = event.key()
 
-        
-        if key == Qt.Key_A or key == Qt.Key_Left or key == Qt.Key_D or key == Qt.Key_Right:
+        if key == Qt.Key_A or key == Qt.Key_Left or key == Qt.Key_D or key == Qt.Key_Right: # parar movimento
             self.label.player_dx = 0
 app = QtWidgets.QApplication(sys.argv)
 
