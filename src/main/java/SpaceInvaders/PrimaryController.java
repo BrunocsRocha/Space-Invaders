@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
+//TELA INICIAL DO JOGO
 package SpaceInvaders;
 
 import java.io.IOException;
@@ -36,7 +33,7 @@ public class PrimaryController implements Initializable {
         makeStars(stars);
     }    
     
-    private void makeStars(Rectangle[] stars){
+    private void makeStars(Rectangle[] stars){ // cria pixels brancos na tela para simular estrelas, utilizado nas outras janelas tambem
         for (int i = 0; i < stars.length; i++) {
             Rectangle star = new Rectangle();
             star.setFill(Color.WHITE);

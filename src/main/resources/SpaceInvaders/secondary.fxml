@@ -17,7 +17,7 @@
             <Font size="26.0" />
          </font>
       </Text>
-      <Rectangle fx:id="player" arcHeight="5.0" arcWidth="5.0" fill="#8a8a76" height="35.0" layoutX="320.0" layoutY="451.0" onKeyPressed="#movePlayer" stroke="BLACK" strokeType="INSIDE" width="13.0" AnchorPane.bottomAnchor="14.0" />
+      <Rectangle fx:id="player" arcHeight="5.0" arcWidth="5.0" fill="#8a8a76" height="35.0" layoutX="320.0" layoutY="451.0" onKeyPressed="#moverPlayer" stroke="BLACK" strokeType="INSIDE" width="13.0" AnchorPane.bottomAnchor="14.0" />
       <Text fill="#1205eb" layoutX="22.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="Score:" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
          <font>
             <Font name="Agency FB" size="29.0" />

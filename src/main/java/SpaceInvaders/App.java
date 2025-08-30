@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import javafx.scene.image.Image;
 
 /**
  * JavaFX App
@@ -19,9 +20,10 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("primary"), 650, 500);
-        stage.setResizable(false);
+        stage.setResizable(false);//O jogo foi desenvolvido para a janela de 650x500 apenas
         stage.setScene(scene);
-        stage.setTitle("Space Invaders");
+        stage.setTitle("Space Invaders");//Coloca o nome da janela
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/imagens/icon.png")));//Adiciona um icone na janela
         stage.show();
     }
 
