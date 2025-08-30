@@ -109,6 +109,13 @@ class MyLabel(QtWidgets.QLabel):
             qp.setPen(QtGui.QColor(255,255,255))
             qp.setFont(QtGui.QFont('Arial', 30))
             qp.drawText(event.rect(), QtCore.Qt.AlignCenter, "FIM DE JOGO")
+        else: #enquanto o jogo nao estiver terminado, vai ficar a mensagem de instrução na tela
+            texto = "Pressione ESPAÇO para atirar e A/D ou SETAS para se mover"
+            qp.setPen(QtGui.QColor(128 ,128,128))
+            qp.setFont(QtGui.QFont('Arial', 12))
+            qp.drawText(event.rect(), QtCore.Qt.AlignBottom | QtCore.Qt.AlignCenter, texto)
+            flags = QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter
+            qp.drawText(event.rect(), flags, texto)
 
         inimigosvivos = 0 #contador de inimigos vivos
         for alvo in self.alvos:
