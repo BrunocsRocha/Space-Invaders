@@ -24,7 +24,18 @@ class MyLabel(QtWidgets.QLabel):
     def __init__(self,parms) -> None:
         super().__init__(parms)
         self.setText ("MyLabel")
-        self.alvos = [] #lista dos inimigos
+        self.paint = True
+        self.direcaodetodos = 0.01 #velocidade horizontal dos inimigos
+        self.frota() #"chama" a função que cria a frota dos inimigos
+        self.bullet = []
+        self.player_x = 0.5 #posição do jogador
+        self.player_dx = 0   #move do jogador
+        self.cooldowndotiro = 0 #tempo de recarga do tiro
+        self.fimdejogo = False
+
+
+    def frota(self): #cria a frota de inimigos
+        self.alvos = []
         linhas = 4 # número de linhas
         colunas = 8 # número de colunas
         for i in range(linhas): # loop pelas linhas
@@ -33,14 +44,8 @@ class MyLabel(QtWidgets.QLabel):
                 pos_y = 0.1 + i * 0.05
                 novo_alvo = Alvo(pos_x, pos_y) 
                 self.alvos.append(novo_alvo) 
-        self.paint = True
-        self.direcaodetodos = 0.01 #velocidade horizontal dos inimigos
-        self.bullet = []
-        self.player_x = 0.5 #posição do jogador
-        self.player_dx = 0   #move do jogador
-        self.cooldowndotiro = 0 #tempo de recarga do tiro
-        self.fimdejogo = False
-
+        self.direcaodetodos = abs(self.direcaodetodos) * 1.1 #aumenta a velocidade dos inimigos sempre que a frota é destruida, aumentando a dificuldade
+        #o abs serve para deixar self.direcaodetodos em módulo, ou seja, sempre começar indo para a direita
     def paintEvent (self, event):
         super().paintEvent(event)
         qp = QtGui.QPainter(self)
@@ -97,7 +102,7 @@ class MyLabel(QtWidgets.QLabel):
             if (b.baladestruida == False and b.getY() > 0): #verifica se a bala não foi destruída e ainda está na tela
                 balasnaodestruidas.append(b) #adiciona a bala à lista de balas não destruídas
         self.bullet = balasnaodestruidas #atualiza a lista de balas
-        if(self.fimdejogo == True):
+        if(self.fimdejogo == True): #tela de fim de jogo
             br = QtGui.QBrush(QtGui.QColor(0, 0, 0, 200))
             qp.setBrush(br)
             qp.drawRect(0,0,width,height)
@@ -105,8 +110,15 @@ class MyLabel(QtWidgets.QLabel):
             qp.setFont(QtGui.QFont('Arial', 30))
             qp.drawText(event.rect(), QtCore.Qt.AlignCenter, "FIM DE JOGO")
 
+        inimigosvivos = 0 #contador de inimigos vivos
+        for alvo in self.alvos:
+            if (alvo.ativo == True):
+                inimigosvivos += 1 #aumenta em 1 o contador de inimigos
+        if (inimigosvivos == 0): #se não houver inimigos vivos, surge outra frota
+            self.frota()
+
     def moveTarget (self):
-        if (self.fimdejogo == True):
+        if (self.fimdejogo == True): #verifica se o jogo ja acabou, se sim, para tudo 
             return
         direcaoedesce = False #unifiquei as direções, já que sempre que ele topar na parede ele vai inverter a direção e ao mesmo tempo vai descer
         if self.cooldowndotiro > 0: 
@@ -138,7 +150,7 @@ class MyLabel(QtWidgets.QLabel):
             if b.getY() <= 0:
                 self.bullet.remove(b)
         for alvo in self.alvos:
-            if (alvo.ativo == True and alvo.y >= 0.85):
+            if (alvo.ativo == True and alvo.y >= 0.85): #verifica se algum inimigo chegou na parte inferior da janela
                 self.fimdejogo = True
                 break
         self.repaint()
