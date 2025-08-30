@@ -4,7 +4,7 @@ class Bullet:
     def __init__ (self, x_inicial = 0.5):
         self.y = 0.9
         self.x = x_inicial - 0.01
-
+        self.baladestruida = False
     def inc (self):
         self.y -= 0.01
 
@@ -19,7 +19,6 @@ class Alvo: #classe para os inimigos
         self.x = x
         self.y = y
         self.ativo = True
-        
 
 class MyLabel(QtWidgets.QLabel):
     def __init__(self,parms) -> None:
@@ -30,13 +29,12 @@ class MyLabel(QtWidgets.QLabel):
         colunas = 8 # número de colunas
         for i in range(linhas): # loop pelas linhas
             for j in range(colunas): # loop pelas colunas
-                pos_x = 0.1 + i * 0.07
-                pos_y = 0.1 + j * 0.05
+                pos_x = 0.1 + j * 0.07
+                pos_y = 0.1 + i * 0.05
                 novo_alvo = Alvo(pos_x, pos_y) 
                 self.alvos.append(novo_alvo) 
         self.paint = True
         self.direcaodetodos = 0.01 #velocidade horizontal dos inimigos
-        #self.direcaovertical = 0.005
         self.bullet = []
         self.player_x = 0.5 #posição do jogador
         self.player_dx = 0   #move do jogador
@@ -76,7 +74,7 @@ class MyLabel(QtWidgets.QLabel):
             )
 
 
-        br = QtGui.QBrush(QtGui.QColor(0, 0, 255, 255)) # jogador
+        br = QtGui.QBrush(QtGui.QColor(0, 0, 255, 255)) #jogador
         qp.setBrush(br)
         qp.drawEllipse(
             int(self.player_x * width) - 15,  
@@ -85,34 +83,39 @@ class MyLabel(QtWidgets.QLabel):
         )
 
         # teste de colisao
-        for alvo in self.alvos: # percorre os inimigos
-            for b in self.bullet: # percorre as balas
-                if (int (abs(b.getX() - alvo.x) * width) < 15) and \
-                (int (abs(b.getY() - alvo.y) * height) < 15):
-                    alvo.ativo = False
+        for b in self.bullet: #percorre as balas 
+            for alvo in self.alvos: #percorre os inimigos
+                if (alvo.ativo == True): 
+                        if (int (abs(b.getX() - alvo.x) * width) < 15) and \
+                        (int (abs(b.getY() - alvo.y) * height) < 15):
+                            alvo.ativo = False
+                            b.baladestruida = True #marca a bala como destruída
+                            break
+        balasnaodestruidas = [] #lista de balas não destruídas
+        for b in self.bullet:
+            if (b.baladestruida == False and b.getY() > 0): #verifica se a bala não foi destruída e ainda está na tela
+                balasnaodestruidas.append(b) #adiciona a bala à lista de balas não destruídas
+        self.bullet = balasnaodestruidas #atualiza a lista de balas
 
     def moveTarget (self):
-        direcaohorizontal = False 
-        #direcaovertical = False
+        direcaoedesce = False #unifiquei as direções, já que sempre que ele topar na parede ele vai inverter a direção e ao mesmo tempo vai descer
         if self.cooldowndotiro > 0: 
             self.cooldowndotiro -= 1 #"cronometro" para o cooldown dos tiros
         for alvo in self.alvos: 
             if (alvo.ativo ==  True):
-                if (self.direcaodetodos > 0 and alvo.x >= 1) or \
-                (self.direcaodetodos < 0 and alvo.x <= 0.05): #verifica os limites(direita e esquerda)
-                    direcaohorizontal = True
+                if (self.direcaodetodos > 0 and alvo.x >= 0.95): #verifica se algum inimigo chegou na borda
+                    direcaoedesce = True
                     break
-                # if (self.direcaovertical > 0 and alvo.y >= 0.7) or \ 
-                #    (self.direcaovertical < 0 and alvo.y <= 0.1):
-                #     direcaovertical = True
-                #     break
-        if (direcaohorizontal == True):
-            self.direcaodetodos *= -1 #muda a direção horizontal
-        # if (direcaovertical == True):
-        #     self.direcaovertical *= -1
-        for alvo in self.alvos: #muda de lugar todos os inimigos
+                elif (self.direcaodetodos < 0 and alvo.x <= 0.05):
+                    direcaoedesce = True
+                    break
+        if (direcaoedesce == True):
+            self.direcaodetodos *= -1  #move os inimigos na direção horizontal 
+            for alvo in self.alvos: #move todos os inimigos para baixo
+                alvo.y += 0.02
+        
+        for alvo in self.alvos: #muda de lugar de todos os inimigos
             alvo.x += self.direcaodetodos
-            # alvo.y += self.direcaovertical
 
         velocidade_jogador = 0.01
         self.player_x += self.player_dx * velocidade_jogador
@@ -127,6 +130,6 @@ class MyLabel(QtWidgets.QLabel):
         self.repaint()
 
     def shoot (self):
-        if self.cooldowndotiro == 0: #verifica se já pode atirar
+        if (self.cooldowndotiro == 0): #verifica se já pode atirar
             self.bullet.append (Bullet(self.player_x))
             self.cooldowndotiro = 10 #tempo de recarga do tiro, começa a contagem do cronometro em 10
