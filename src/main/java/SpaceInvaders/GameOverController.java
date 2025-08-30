@@ -43,12 +43,12 @@ public class GameOverController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         makeStars(stars);
-        setScore(SecondaryController.scores);
+        setScore(SecondaryController.finalScore);
         base();
     }    
     
     public void setScore(Integer score) {
-        this.aScore = score;
+        aScore = score;
         updateScore(); 
     }
 
@@ -68,13 +68,13 @@ public class GameOverController implements Initializable {
 
     @FXML
     private void again(ActionEvent event) throws IOException {
-        SecondaryController.scores =0;
+        SecondaryController.finalScore =0;
         App.setRoot("secondary"); 
     }
 
 @FXML
     private void init(ActionEvent event) throws IOException {
-        SecondaryController.scores =0;
+        SecondaryController.finalScore =0;
         App.setRoot("primary");
     }
 
