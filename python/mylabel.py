@@ -39,6 +39,7 @@ class MyLabel(QtWidgets.QLabel):
         self.player_x = 0.5 #posição do jogador
         self.player_dx = 0   #move do jogador
         self.cooldowndotiro = 0 #tempo de recarga do tiro
+        self.fimdejogo = False
 
     def paintEvent (self, event):
         super().paintEvent(event)
@@ -96,8 +97,17 @@ class MyLabel(QtWidgets.QLabel):
             if (b.baladestruida == False and b.getY() > 0): #verifica se a bala não foi destruída e ainda está na tela
                 balasnaodestruidas.append(b) #adiciona a bala à lista de balas não destruídas
         self.bullet = balasnaodestruidas #atualiza a lista de balas
+        if(self.fimdejogo == True):
+            br = QtGui.QBrush(QtGui.QColor(0, 0, 0, 200))
+            qp.setBrush(br)
+            qp.drawRect(0,0,width,height)
+            qp.setPen(QtGui.QColor(255,255,255))
+            qp.setFont(QtGui.QFont('Arial', 30))
+            qp.drawText(event.rect(), QtCore.Qt.AlignCenter, "FIM DE JOGO")
 
     def moveTarget (self):
+        if (self.fimdejogo == True):
+            return
         direcaoedesce = False #unifiquei as direções, já que sempre que ele topar na parede ele vai inverter a direção e ao mesmo tempo vai descer
         if self.cooldowndotiro > 0: 
             self.cooldowndotiro -= 1 #"cronometro" para o cooldown dos tiros
@@ -112,7 +122,7 @@ class MyLabel(QtWidgets.QLabel):
         if (direcaoedesce == True):
             self.direcaodetodos *= -1  #move os inimigos na direção horizontal 
             for alvo in self.alvos: #move todos os inimigos para baixo
-                alvo.y += 0.02
+                alvo.y += 0.03
         
         for alvo in self.alvos: #muda de lugar de todos os inimigos
             alvo.x += self.direcaodetodos
@@ -127,6 +137,10 @@ class MyLabel(QtWidgets.QLabel):
             b.inc()
             if b.getY() <= 0:
                 self.bullet.remove(b)
+        for alvo in self.alvos:
+            if (alvo.ativo == True and alvo.y >= 0.85):
+                self.fimdejogo = True
+                break
         self.repaint()
 
     def shoot (self):
