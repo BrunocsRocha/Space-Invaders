@@ -27,10 +27,6 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
-        # self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        # self.pushButton.setMaximumSize(QtCore.QSize(60, 30))
-        # self.pushButton.setObjectName("pushButton")
-        # self.horizontalLayout.addWidget(self.pushButton)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem2)
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -39,12 +35,10 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        #self.pushButton.clicked.connect(MainWindow.slotAtirar)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        # self.pushButton.setText(_translate("MainWindow", "Atirar"))
 
 from mylabel import MyLabel

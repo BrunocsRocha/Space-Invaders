@@ -8,18 +8,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, *args, obj=None, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.setupUi(self)
-        self.setWindowTitle ("Tiro ao alvo")
+        self.setWindowTitle ("Space Invaders")
         self.timer=QTimer()
         self.timer.timeout.connect(self.label.moveTarget)
         self.timer.start (36)
 
-    #def slotAtirar (self):
-        #self.label.shoot()
-
+    
     def keyPressEvent(self, event):
-        print("tecla tecla tecla")
         key = event.key()
-        print(f"tecla pressionada: {key}")
         # move esquerda
         if key == Qt.Key_A or key == Qt.Key_Left:
             self.label.player_dx = -1 # 
@@ -30,7 +26,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Atirar
         elif key == Qt.Key_Space:
-            print("espaçoooooo")
             self.label.shoot()
 
     def keyReleaseEvent(self, event):
